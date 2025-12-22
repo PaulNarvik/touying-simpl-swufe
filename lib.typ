@@ -3,10 +3,12 @@
 // Author: Lei Chao <le.haibo@qq.com>
 // Inspired by Touying's stargazer theme and https://github.com/Coekjan/touying-buaa
 #import "@preview/touying:0.6.1": *
+#import "@preview/shadowed:0.2.0": shadowed
 
 
+// Internal implementation for tblock() - handles the actual layout and styling with shadow effects
 #let _tblock(self: none, title: none, it) = {
-  grid(
+  let content = grid(
     columns: 1,
     row-gutter: 0pt,
     block(
@@ -31,6 +33,15 @@
       it,
     ),
   )
+  shadowed(
+    fill: none,
+    radius: 6pt,
+    inset: 0pt,
+    shadow: 6pt,
+    dx: 1pt,
+    dy: 1pt,
+    clip: false,
+  )[#content]
 }
 
 
@@ -41,6 +52,12 @@
 /// - it (content): The content of the theorem.
 #let tblock(title: none, it) = touying-fn-wrapper(_tblock.with(title: title, it))
 
+/// Add shadow to a figure
+///
+/// - fig (content): Figure or image environment
+#let shadow-figure(fig) = align(center)[
+  #shadowed(fill: none, radius: 0pt, shadow: 6pt, dx: 0pt, dy: 0pt)[#fig]
+]
 
 /// Default slide function for the presentation.
 ///
@@ -196,7 +213,7 @@
           width: 100%,
           height: 100%,
           {
-            set image(width: 100%, height: 100%, fit: "contain")
+            set image(height: 3em, fit: "contain")
             utils.call-or-display(self, info.banner)
           },
         )),
@@ -212,13 +229,14 @@
 
 /// Outline slide for the presentation.
 /// Add bullet points for each section
-/// - config (dictionary): is the configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
 ///
-/// - title (string): is the title of the outline. Default is `utils.i18n-outline-title`.
+/// - config (dictionary): The configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
 ///
-/// - level (int, none): is the level of the outline. Default is `none`.
+/// - title (string): The title of the outline. Default is `utils.i18n-outline-title`.
 ///
-/// - numbered (boolean): is whether the outline is numbered. Default is `true`.
+/// - level (int, none): The level of the outline. Default is `none`.
+///
+/// - numbered (boolean): Whether the outline is numbered. Default is `true`.
 #let outline-slide(
   config: (:),
   title: utils.i18n-outline-title,
@@ -263,15 +281,15 @@
 ///
 /// Example: `config-common(new-section-slide-fn: new-section-slide.with(numbered: false))`
 ///
-/// - config (dictionary): is the configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
+/// - config (dictionary): The configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
 ///
-/// - title (content, function): is the title of the section. The default is `utils.i18n-outline-title`.
+/// - title (content, function): The title of the section. Default is `utils.i18n-outline-title`.
 ///
-/// - level (int): is the level of the heading. The default is `1`.
+/// - level (int): The level of the heading. Default is `1`.
 ///
-/// - numbered (boolean): is whether the heading is numbered. The default is `true`.
+/// - numbered (boolean): Whether the heading is numbered. Default is `true`.
 ///
-/// - body (none): is the body of the section. It will be passed by touying automatically.
+/// - body (none): The body of the section. It will be passed by touying automatically.
 #let new-section-slide(
   config: (:),
   title: utils.i18n-outline-title,
@@ -287,9 +305,9 @@
 ///
 /// Example: `#focus-slide[Wake up!]`
 ///
-/// - config (dictionary): is the configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
+/// - config (dictionary): The configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
 ///
-/// - align (alignment): is the alignment of the content. The default is `horizon + center`.
+/// - align (alignment): The alignment of the content. Default is `horizon + center`.
 #let focus-slide(config: (:), align: horizon + center, body) = touying-slide-wrapper(self => {
   self = utils.merge-dicts(
     self,
@@ -308,10 +326,12 @@
 
 /// End slide for the presentation.
 /// Remove the title and center the content.
-/// - config (dictionary): is the configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
 ///
+/// Example: `#ending-slide[Thank you!]`
 ///
-/// - body (array): is the content of the slide.
+/// - config (dictionary): The configuration of the slide. You can use `config-xxx` to set the configuration of the slide. For more several configurations, you can use `utils.merge-dicts` to merge them.
+///
+/// - body (content): The content of the slide.
 
 #let ending-slide(config: (:), body) = touying-slide-wrapper(self => {
   self.store.title = none
@@ -331,13 +351,13 @@
 /// Example:
 ///
 /// ```typst
-/// #show: swufe-theme.with(aspect-ratio: "16-9", config-colors(primary: blue))`
+/// #show: swufe-theme.with(aspect-ratio: "16-9", config-colors(primary: blue))
 /// ```
 ///
 /// Consider using:
 ///
 /// ```typst
-/// #set text(font: "Fira Sans", weight: "light", size: 20pt)`
+/// #set text(font: "Fira Sans", weight: "light", size: 20pt)
 /// #show math.equation: set text(font: "Fira Math")
 /// #set strong(delta: 100)
 /// #set par(justify: true)
@@ -356,33 +376,33 @@
 /// )
 /// ```
 ///
-/// - aspect-ratio (string): is the aspect ratio of the slides. The default is `16-9`.
+/// - aspect-ratio (string): The aspect ratio of the slides. Default is `16-9`.
 ///
-/// - align (alignment): is the alignment of the content. The default is `horizon`.
+/// - align (alignment): The alignment of the content. Default is `horizon`.
 ///
-/// - title (content, function): is the title in the header of the slide. The default is `self => utils.display-current-heading(depth: self.slide-level)`.
+/// - title (content, function): The title in the header of the slide. Default is `self => utils.display-current-heading(depth: self.slide-level)`.
 ///
-/// - header-right (content, function): is the right part of the header. The default is `self => self.info.logo`.
+/// - header-right (content, function): The right part of the header. Default is `self => self.info.logo`.
 ///
-/// - footer (content, function): is the footer of the slide. The default is `none`.
+/// - footer (content, function): The footer of the slide. Default is `none`.
 ///
-/// - footer-right (content, function): is the right part of the footer. The default is `context utils.slide-counter.display() + " / " + utils.last-slide-number`.
+/// - footer-right (content, function): The right part of the footer. Default is `context utils.slide-counter.display() + " / " + utils.last-slide-number`.
 ///
-/// - progress-bar (boolean): is whether to show the progress bar in the footer. The default is `true`.
+/// - progress-bar (boolean): Whether to show the progress bar in the footer. Default is `true`.
 ///
-/// - footer-columns (array): is the columns of the footer. The default is `(1fr, 2fr, 0.7fr, 0.3fr)`.
+/// - footer-columns (array): The columns of the footer. Default is `(1fr, 2fr, 0.7fr, 0.3fr)`.
 ///
-/// - footer-a (content, function): is the left part of the footer. The default is `self => self.info.author`.
+/// - footer-a (content, function): The left part of the footer. Default is `self => self.info.author`.
 ///
-/// - footer-b (content, function): is the second right part of the footer. The default is `self => if self.info.short-title == auto { self.info.title } else { self.info.short-title }`.
+/// - footer-b (content, function): The second right part of the footer. Default is `self => if self.info.short-title == auto { self.info.title } else { self.info.short-title }`.
 ///
-/// - footer-c (content, function): is the second left part of the footer. The default is `self => utils.display-info-date(self)`.
+/// - footer-c (content, function): The second left part of the footer. Default is `self => utils.display-info-date(self)`.
 ///
-/// - footer-d (content, function): is the right part of the footer. The default is `context utils.slide-counter.display() + " / " + utils.last-slide-number`.
+/// - footer-d (content, function): The right part of the footer. Default is `context utils.slide-counter.display() + " / " + utils.last-slide-number`.
 #let swufe-theme(
   aspect-ratio: "16-9",
   lang: "en",
-  font: ("Libertinus Serif",),
+  font: ((name: "Libertinus Serif", covers: "latin-in-cjk"), "KaiTi", "Kaiti SC", "楷体", "Noto Serif CJK SC"),
   align: horizon,
   alpha: 20%,
   title: self => utils.display-current-heading(depth: self.slide-level),
@@ -462,7 +482,7 @@
   }
 
   show: touying-slides.with(
-    config-info(banner: image("assets/swufebanner.svg", height: 3em)),
+    config-info(banner: image("assets/swufebanner.svg")),
     config-page(
       paper: "presentation-" + aspect-ratio,
       header: header,

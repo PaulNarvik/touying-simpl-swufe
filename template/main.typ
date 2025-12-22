@@ -1,12 +1,9 @@
-#import "@preview/touying-simpl-swufe:0.1.0": *
-// #import "../lib.typ": *
+#import "@preview/touying-simpl-swufe:0.2.0": *
+
 
 #show: swufe-theme.with(
-  // Lang and font configuration
   aspect-ratio: "16-9",
   lang: "en", // ""en" for English, "zh" for Chinese
-  // Recommended KaiTi for Chinese slides
-  // font: ((name: "Libertinus Serif", covers: "latin-in-cjk"), "KaiTi", "Kaiti SC", "Kai", "楷体"),
 
 
   // Basic information

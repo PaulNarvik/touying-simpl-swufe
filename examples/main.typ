@@ -1,12 +1,5 @@
-#import "@preview/cetz:0.4.2"
-#import "@preview/fletcher:0.5.8" as fletcher: edge, node
-// #import "../lib.typ": *
-#import "@preview/touying-simpl-swufe:0.1.0": *
+#import "../lib.typ": *
 
-
-// cetz and fletcher bindings for touying
-#let cetz-canvas = touying-reducer.with(reduce: cetz.canvas, cover: cetz.draw.hide.with(bounds: true))
-#let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
 
 #show: swufe-theme.with(
   // Lang and font configuration
@@ -142,14 +135,11 @@
 
   Typst = LaTeX 的排版能力 + Markdown 的简洁语法 + 现代的脚本语言
 
-  #underline[本讲座]包括以下内容：
+  #underline[本示例文档]包括以下内容：
 
+  + Typst 和 Touying 的简介
   + 快速入门 Typst
-  + Typst 编写各类模板
-    - 笔记、论文、简历和 Slides
-  + Typst 高级特性
-    - 脚本、样式和包管理
-  + Typst 周边生态开发体验
+  + 其他功能
 
   ```py
   print('Hello Typst!')
@@ -165,20 +155,32 @@
 
   Typst = LaTeX 的排版能力 + Markdown 的简洁语法 + 现代的脚本语言
 
-  #underline[本讲座]包括以下内容：
+  #underline[本示例文档]包括以下内容：
 
+  + Typst 和 Touying 的简介
   + 快速入门 Typst
-  + Typst 编写各类模板
-    - 笔记、论文、简历和 Slides
-  + Typst 高级特性
-    - 脚本、样式和包管理
-  + Typst 周边生态开发体验
+  + 其他功能
   ```py
   print('Hello Typst!')
   ```
 ]
 
-== 公式
+== 列表
+
+- 无序列表使用 `-` 作为标记：
+  - 第一项
+  - 第二项
+    - 第二项的子项
+  - 第三项
+
+#v(1em)
+
++ 有序列表使用数字加点 `+` 或者自行编号作为标记：
+  + 第一项
+  + 第二项
+    5. 第二项的子项
+  + 第三项
+== 插入公式
 - Typst公式比Latex更简洁，不需要反斜杠`\`，直接使用命令名称即可。
   - 字母与字母之间需要空格隔开，否则会认为是命令。例如 `sum` 会被解析为 $sum$。
   - 如果需要用到多字母表示变量名称，需要用双引号`""`包裹。
@@ -205,15 +207,25 @@ $ <eq>
 
 - `@` 可以用来引用公式，例如上面的公式编号为 (@eq)。
 
-== 图片
+== 插入图片
+- 推荐使用 VSCode 中 #link("https://marketplace.visualstudio.com/items?itemName=yuzhong.typst-figure-pastetools")[Typst-figure-pasteTools] 插件，像 Word 一样复制粘贴图片即可自动生成 `#figure` 代码块。
+
 #figure(
   image("../assets/swufelogo.svg", width: auto, height: 30%),
   caption: [西南财经大学校徽],
 )
 
-#image("../assets/swufebanner.svg", width: auto, height: 40%)
+
+
+== 插入带阴影的图片
+- 使用 `#shadow-figure()` 可以插入带阴影效果的图片，避免图片融入背景无法区分。
+#shadow-figure(
+  image("../thumbnail.webp", width: auto, height: 80%),
+)
 
 == 表格
+- 推荐使用 VSCode 中 #link("https://github.com/leichaoL/typst-table-paste")[Typst-table-paste] 插件（暂未上架插件商店），将 Word、Excel 或者其他表格软件中的表格复制粘贴到 Typst 中即可自动生成 `#figure(table())` 代码块。
+
 #figure(
   table(
     columns: (1fr, 1fr, 1fr),
@@ -230,106 +242,8 @@ $ <eq>
   ),
   caption: "一个示例表",
 )
-= Touying 幻灯片动画
-
-== 简单动画
-
-使用 ```typ #pause``` #pause 暂缓显示内容。
-
-#pause
-
-就像这样。
-
-#meanwhile
-
-同时，#pause 我们可以使用 ```typ #meanwhile``` 来 #pause 显示同时其他内容。
-
-#speaker-note[
-  使用 ```typ config-common(show-notes-on-second-screen: right)``` 来启用演讲提示，否则将不会显示。
-]
-
-== 复杂动画 - Callback-Style
-
-#slide(repeat: 3, self => [
-  #let (uncover, only, alternatives) = utils.methods(self)
-
-  在子幻灯片 #self.subslide 中，我们可以：
-
-  使用 #uncover("2-")[```typ #uncover``` 函数]（预留空间）
-
-  使用 #only("2-")[```typ #only``` 函数]（不预留空间）
-
-  #alternatives[多次调用 ```typ #only``` 函数 \u{2717}][使用 ```typ #alternatives``` 函数 #sym.checkmark] 从多个备选项中选择一个。
-])
 
 
-== 数学公式动画
-
-在 Touying 数学公式中使用 `pause`:
-
-#touying-equation(
-  `
-  f(x)  &= pause x^2 + 2x + 1  \
-        &= pause (x + 1)^2  \
-`,
-)
-
-#meanwhile
-
-如您所见，#pause 这是 $f(x)$ 的表达式。
-
-#pause
-
-通过因式分解，我们得到了结果。
-
-= 与其他 Typst 包集成
-
-== CeTZ 动画
-
-在 Touying 中集成 CeTZ 动画：
-
-#cetz-canvas({
-  import cetz.draw: *
-
-  rect((0, 0), (5, 5))
-
-  (pause,)
-
-  rect((0, 0), (1, 1))
-  rect((1, 1), (2, 2))
-  rect((2, 2), (3, 3))
-
-  (pause,)
-
-  line((0, 0), (2.5, 2.5), name: "line")
-})
-
-
-== Fletcher 动画
-
-在 Touying 中集成 Fletcher 动画：
-
-#fletcher-diagram(
-  node-stroke: .1em,
-  node-fill: gradient.radial(blue.lighten(80%), blue, center: (30%, 20%), radius: 80%),
-  spacing: 4em,
-  edge((-1, 0), "r", "-|>", `open(path)`, label-pos: 0, label-side: center),
-  node((0, 0), `reading`, radius: 2em),
-  edge((0, 0), (0, 0), `read()`, "--|>", bend: 130deg),
-  pause,
-  edge(`read()`, "-|>"),
-  node((1, 0), `eof`, radius: 2em),
-  pause,
-  edge(`close()`, "-|>"),
-  node((2, 0), `closed`, radius: 2em, extrude: (-2.5, 0)),
-  edge((0, 0), (2, 0), `close()`, "-|>", bend: -40deg),
-)
-
-== 其他例子
-
-#tblock(title: [Pinit, MiTeX, Codly, Ctheorems...])[
-  Touying 社区正在探索与更多 Typst 包的集成，详细情况可查阅#link("https://touying-typ.github.io/zh/docs/category/package-integration/")[文档]。
-]
 
 = 其他功能
 
@@ -402,7 +316,8 @@ $ <eq>
 
 #slide[
   - 本模板基于 Touying 包开发，感谢 Touying 团队的辛勤付出与贡献。
-  - 本模板仓库位于 #link("https://github.com/leichaoL/touying-simpl-swufe")，欢迎关注与贡献。
+  - 本模板是 Overleaf 模板仓库中 #link("https://www.overleaf.com/latex/templates/swufe-beamer-theme/hysqbvdbpnsm")[swufe-beamer-theme] 的 Typst 版本。模板仓库位于 #link("https://github.com/leichaoL/touying-simpl-swufe")，欢迎关注与贡献。
+  - 更多 Typst 入门可以访问 OrangeX4 大佬的 #link("https://github.com/OrangeX4/typst-talk")[并不复杂的 Typst 讲座]。
 ]
 
 ==
