@@ -1,3 +1,6 @@
+[![Typst Package](https://img.shields.io/badge/Typst-Package-239dad?logo=typst)](https://typst.app/universe/package/touying-simpl-swufe)
+[![License](https://img.shields.io/github/license/leichaoL/touying-simpl-swufe)](https://github.com/leichaoL/touying-simpl-swufe/blob/main/LICENSE)
+
 # [English](README.en.md) | [中文说明](README.md)
 # Typst Touying Template for Southwestern University of Finance and Economics (SWUFE)
 
