@@ -213,7 +213,7 @@
           width: 100%,
           height: 100%,
           {
-            set image(height: 3em, fit: "contain")
+            set image(height: 10em, fit: "contain")
             utils.call-or-display(self, info.banner)
           },
         )),
@@ -402,7 +402,7 @@
 #let swufe-theme(
   aspect-ratio: "16-9",
   lang: "en",
-  font: ((name: "Libertinus Serif", covers: "latin-in-cjk"), "KaiTi", "Kaiti SC", "楷体", "Noto Serif CJK SC"),
+  font: ("Fira Sans"),
   align: horizon,
   alpha: 20%,
   title: self => utils.display-current-heading(depth: self.slide-level),
