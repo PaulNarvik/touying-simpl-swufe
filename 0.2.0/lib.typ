@@ -1,4 +1,3 @@
-// touying theme for swufe
 // typst version for swufe-beamer-theme: https://www.overleaf.com/latex/templates/swufe-beamer-theme/hysqbvdbpnsm
 // Author: Lei Chao <le.haibo@qq.com>
 // Inspired by Touying's stargazer theme and https://github.com/Coekjan/touying-buaa
@@ -256,17 +255,24 @@
           weight: "bold",
           components.custom-progressive-outline(
             level: level,
+            // alpha: 50%,
             alpha: self.store.alpha,
-            indent: (0em, 1em),
-            vspace: (.4em,),
-            numbered: (numbered,),
+            indent: (0em, 1.5em),
+            text-size: (1em, 1em),
+            text-weight: ("bold", "regular"),
+            vspace: (.4em, -.4em),
+            numbered: (numbered, numbered),
             numbering: (
               (..nums) => {
                 box(baseline: -0.65em, components.knob-marker(primary: self.colors.primary))
                 h(0.25em)
               },
+              (..nums) => {
+                box(baseline: -0.65em, components.knob-marker(primary: self.colors.primary))
+                h(0.25em)
+              }
             ),
-            depth: 1,
+            depth: 2,
             ..args.named(),
           ),
         ),
@@ -402,7 +408,7 @@
 #let swufe-theme(
   aspect-ratio: "16-9",
   lang: "en",
-  font: ("Fira Sans"),
+  font: ("Open Sans"),
   align: horizon,
   alpha: 20%,
   title: self => utils.display-current-heading(depth: self.slide-level),
